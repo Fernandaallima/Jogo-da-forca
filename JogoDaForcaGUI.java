@@ -1,3 +1,4 @@
+// Importa as classes necessárias para criar a interface gráfica e o jogo.
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,7 @@ import javax.swing.SwingUtilities;
 
 public class JogoDaForcaGUI extends JFrame implements ActionListener {
 
-    // Componentes da interface
+    // Declara os componentes da interface gráfica, como rótulos e botões,
     private JLabel labelPalavra;
     private JLabel labelMensagem;
     private JLabel labelMensagemVitoria;
@@ -22,7 +23,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
     private JButton botaoTentar;
     private PainelForca painelForca; 
 
-    // Lógica do jogo
+    // Declara as variáveis que gerenciam a lógica do jogo.
     private HashMap<String, String> palavrasComDicas;
     private ArrayList<String> listaDePalavras;
     private Random random;
@@ -31,15 +32,15 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
     private String letrasUsadas;
     private int tentativasRestantes;
     private final int MAX_TENTATIVAS = 6; 
+    private int totalTentativas; 
 
-    // Construtor da classe
+    // O construtor da classe, onde a interface gráfica é configurada.  
     public JogoDaForcaGUI() {
         super("Jogo da Forca");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400); 
         setLayout(new BorderLayout()); 
 
-        // Lista de palavras e dicas
         palavrasComDicas = new HashMap<>();
         palavrasComDicas.put("MOUSE", "Usado para clicar e mover na tela.");
         palavrasComDicas.put("CODIGO", "As instruções que um programador escreve.");
@@ -53,7 +54,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         listaDePalavras = new ArrayList<>(palavrasComDicas.keySet());
         random = new Random();
 
-        // Inicializa os componentes da interface
+
         labelPalavra = new JLabel("");
         labelMensagem = new JLabel("Digite sua tentativa:");
         labelDica = new JLabel("");
@@ -92,6 +93,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         iniciarNovoJogo();
     }
 
+
     private void iniciarNovoJogo() {
         palavraChave = listaDePalavras.get(random.nextInt(listaDePalavras.size()));
         String dica = palavrasComDicas.get(palavraChave);
@@ -99,9 +101,10 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         palavraAdivinhada = "";
         letrasUsadas = "";
         tentativasRestantes = MAX_TENTATIVAS;
+        totalTentativas = 0;
 
         for (int i = 0; i < palavraChave.length(); i++) {
-            palavraAdivinhada += "_";
+            palavraAdivinhada += "_ ";
         }
         
         labelPalavra.setText(palavraAdivinhada);
@@ -114,6 +117,8 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         botaoTentar.setEnabled(true);
     }
 
+    // Contém toda a lógica do jogo, verificando a entrada do usuário
+    // e atualizando o estado do jogo e a interface.
     @Override
     public void actionPerformed(ActionEvent e) {
         String entrada = campoEntrada.getText().toUpperCase();
@@ -124,13 +129,14 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
             return;
         }
 
+        totalTentativas++;
+
         if (entrada.length() > 1) {
             if (entrada.equals(palavraChave)) {
-                int tentativasUsadas = MAX_TENTATIVAS - tentativasRestantes;
                 labelPalavra.setText(palavraChave);
                 
                 labelMensagemVitoria.setText("Parabéns! Você venceu!");
-                labelMensagem.setText("A palavra era: " + palavraChave + ". Você precisou de " + tentativasUsadas + " tentativas.");
+                labelMensagem.setText("A palavra era: " + palavraChave + ". Você precisou de " + totalTentativas + " tentativas.");
                 
                 botaoTentar.setEnabled(false);
             } else {
@@ -143,6 +149,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
             char letraTentada = entrada.charAt(0);
             if (letrasUsadas.indexOf(letraTentada) >= 0) {
                 labelMensagem.setText("Você já tentou a letra '" + letraTentada + "'.");
+                totalTentativas--; 
                 return;
             }
             letrasUsadas += letraTentada;
@@ -150,16 +157,15 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
             if (palavraChave.indexOf(letraTentada) >= 0) {
                 String novaPalavraAdivinhada = "";
                 for (int i = 0; i < palavraChave.length(); i++) {
-                    novaPalavraAdivinhada += letrasUsadas.indexOf(palavraChave.charAt(i)) >= 0 ? palavraChave.charAt(i) : "_";
+                    novaPalavraAdivinhada += letrasUsadas.indexOf(palavraChave.charAt(i)) >= 0 ? palavraChave.charAt(i) + " " : "_ ";
                 }
                 palavraAdivinhada = novaPalavraAdivinhada;
                 labelPalavra.setText(palavraAdivinhada);
 
                 if (!palavraAdivinhada.contains("_")) {
-                    int tentativasUsadas = MAX_TENTATIVAS - tentativasRestantes;
-                    
+                    labelPalavra.setText(palavraAdivinhada.trim());
                     labelMensagemVitoria.setText("Parabéns! Você venceu!");
-                    labelMensagem.setText("A palavra era: " + palavraChave + ". Você precisou de " + tentativasUsadas + " tentativas.");
+                    labelMensagem.setText("A palavra era: " + palavraChave + ". Você precisou de " + totalTentativas + " tentativas.");
                     
                     botaoTentar.setEnabled(false);
                 } else {
@@ -178,7 +184,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
 
         if (tentativasRestantes <= 0) {
             labelMensagemVitoria.setText("GAME OVER!");
-            labelMensagem.setText("NÃO FOI DESSA VEZ. A palavra era: " + palavraChave);
+            labelMensagem.setText("NÃO FOI DESSA VEZ. A palavra era: " + palavraChave + ". Você usou " + totalTentativas + " tentativas.");
             botaoTentar.setEnabled(false);
         }
     }
@@ -186,5 +192,4 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new JogoDaForcaGUI());
     }
-
 }

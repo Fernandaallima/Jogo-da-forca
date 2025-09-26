@@ -42,7 +42,7 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         // Lista de palavras e dicas
         palavrasComDicas = new HashMap<>();
         palavrasComDicas.put("MOUSE", "Usado para clicar e mover na tela.");
-        palavrasComDicas.put("CÓDIGO", "As instruções que um programador escreve.");
+        palavrasComDicas.put("CODIGO", "As instruções que um programador escreve.");
         palavrasComDicas.put("LINK", "Um endereço para uma página na internet.");
         palavrasComDicas.put("BYTES", "Unidade básica de informação no computador.");
         palavrasComDicas.put("TELA", "Onde você vê as imagens do computador.");
@@ -186,4 +186,5 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new JogoDaForcaGUI());
     }
+
 }

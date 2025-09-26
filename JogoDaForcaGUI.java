@@ -47,7 +47,6 @@ public class JogoDaForcaGUI extends JFrame implements ActionListener {
         palavrasComDicas.put("LINK", "Um endereço para uma página na internet.");
         palavrasComDicas.put("BYTES", "Unidade básica de informação no computador.");
         palavrasComDicas.put("TELA", "Onde você vê as imagens do computador.");
-        palavrasComDicas.put("ROBOT", "Máquina programável que faz tarefas.");
         palavrasComDicas.put("EMAIL", "Mensagem digital enviada pela internet.");
         palavrasComDicas.put("NUVEM", "Espaço de armazenamento virtual.");
         
